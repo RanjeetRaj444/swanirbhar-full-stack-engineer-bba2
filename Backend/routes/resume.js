@@ -5,10 +5,26 @@ const Resume = require("../models/Resume");
 const { Configuration, OpenAIApi } = require("openai");
 const router = express.Router();
 
+const { Configuration, OpenAIApi } = require("openai");
+
 const configuration = new Configuration({
-	apiKey: process.env.OPENAI_API_KEY,
+	apiKey: "YOUR_OPENAI_API_KEY",
 });
 const openai = new OpenAIApi(configuration);
+
+router.post("/:id/ai-suggestions", authenticate, async (req, res) => {
+	const { jobDescription } = req.body;
+	try {
+		const response = await openai.createCompletion({
+			model: "text-davinci-003",
+			prompt: `Provide resume improvement suggestions based on the job description: ${jobDescription}`,
+			max_tokens: 100,
+		});
+		res.json(response.data.choices[0].text);
+	} catch (error) {
+		res.status(400).json({ error: error.message });
+	}
+});
 
 // Middleware to verify token
 const authenticate = (req, res, next) => {
