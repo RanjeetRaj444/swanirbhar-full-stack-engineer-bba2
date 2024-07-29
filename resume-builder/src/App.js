@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import Resume from "./components/Resume";
+import Login from "./pages/Login";
+import PrivateRoute from "./components/PrivateRoute";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+	//👇🏻 state holding the result
+	const [result, setResult] = useState({});
+
+	return (
+		<div>
+			<BrowserRouter>
+				<Routes>
+					<Route
+						path="/"
+						element={
+							// <PrivateRoute>
+								<Home setResult={setResult} />
+							// </PrivateRoute>
+						}
+					/>
+					<Route
+						path="/resume"
+						element={
+							// <PrivateRoute>
+								<Resume result={result} />
+							// </PrivateRoute>
+						}
+					/>
+					<Route path="/login" element={<Login />} />
+				</Routes>
+			</BrowserRouter>
+		</div>
+	);
+};
 
 export default App;
